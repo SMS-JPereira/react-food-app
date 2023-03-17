@@ -75,20 +75,6 @@ function Homepage() {
         }
     }, [favorites])
 
-    // const addToFavorites = (getCurrentRecipeItem) => {
-    //     let cpyFavorites = [...favorites]
-
-    //     const index = cpyFavorites.findIndex(item => item.id === getCurrentRecipeItem.id)
-    //     if (index === -1) {
-    //         cpyFavorites.push(getCurrentRecipeItem)
-    //         setFavorites(cpyFavorites)
-    //         // save the favorites in local storage
-    //         localStorage.setItem('favorites', JSON.stringify(cpyFavorites))
-    //     } else {
-    //         alert(`The recipe '${getCurrentRecipeItem.title}' is already present in Favorites.`)
-    //     }
-    // }
-
     const removeFromFavorites = (getCurrentFavoriteId) => {
         let cpyFavorites = [...favorites]
         cpyFavorites = cpyFavorites.filter(item => item.id !== getCurrentFavoriteId)
@@ -98,28 +84,14 @@ function Homepage() {
 
     useEffect(() => {
         // console.log('runs only once on page load');
-        const extractFavoritesFromLocalStorageOnPageLoad = JSON.parse(localStorage.getItem('favorites'))
+        const extractFavoritesFromLocalStorageOnPageLoad = JSON.parse(localStorage.getItem('favorites')) || [];
         setFavorites(extractFavoritesFromLocalStorageOnPageLoad)
     }, [])
 
-    const filteredFavoriteItems = favorites.filter((item) =>
+    // filter the favorites
+    const filteredFavoriteItems = favorites && favorites.length > 0 ? favorites.filter((item) =>
         item.title.toLowerCase().includes(filteredState.filteredValue)
-    )
-
-    // const renderRecipes = useCallback(() => {
-    //     if (recipes && recipes.length > 0) {
-    //         return (
-    //             recipes.map((item) => (
-    //                 <RecipeItem
-    //                     addToFavorites={() => addToFavorites(item)}
-    //                     id={item.id}
-    //                     image={item.image}
-    //                     title={item.title}
-    //                 />
-    //             ))
-    //         )
-    //     }
-    // }, [recipes, addToFavorites])
+    ) : [];
 
     return (
         <div className="homepage">
@@ -183,19 +155,6 @@ function Homepage() {
                             : null,
                         [loadingState, recipes, addToFavorites]
                     )
-
-                    // renderRecipes()
-
-                    // recipes && recipes.length > 0
-                    //     ? recipes.map((item) => (
-                    //         <RecipeItem
-                    //             addToFavorites={() => addToFavorites(item)}
-                    //             id={item.id}
-                    //             image={item.image}
-                    //             title={item.title}
-                    //         />
-                    //     ))
-                    //     : null
                 }
             </div>
             {/*  map through all the recipes */}
